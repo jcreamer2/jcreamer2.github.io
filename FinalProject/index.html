@@ -1,1 +1,171 @@
+<!doctype html>
+<html lang="en">
+<html>
+	<head>
+			<title>Indian Reservations and Access to Facilities | Josh Creamer</title>
+
+      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"crossorigin=""/>
+
+      <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/1.5.2/css/ionicons.min.css">
+
+      <link rel="stylesheet" href="https://rawcdn.githack.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.css">
+
+      <link href="https://netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet">
+
+      <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+      <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"crossorigin=""></script>
+
+      <script src="https://rawcdn.githack.com/lvoogdt/Leaflet.awesome-markers/2.0/develop/dist/leaflet.awesome-markers.js"></script>
+
+			<script src="https://jcreamer2.github.io/FinalProject/UrgentCare2.json"crossorigin=""></script>
+
+			<script src="https://jcreamer2.github.io/FinalProject/Reservations2.json"crossorigin=""></script>
+
+			<script src="https://jcreamer2.github.io/FinalProject/PublicSchools2.json"crossorigin=""></script>
+
+			<script src="https://jcreamer2.github.io/FinalProject/NursingHomes2.json"crossorigin=""></script>
+
+			<script src="https://jcreamer2.github.io/FinalProject/Hospitals2.json"crossorigin=""></script>
+
+			<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+
+      <style type="text/css">
+        html,body{ margin: 0; padding: 0; height:100%; width: 100vw; }
+        #map{ min-height: 100%; }
+        .legend{
+            padding: 6px 8px;
+            line-height: 18px;
+            background: rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 5px;
+          }
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7;
+          }
+        </style>
+
+			</head>
+
+			<body>
+
+				<div id="map"></div>
+
+				<script type="text/javascript">
+
+				var map = L.map('map', {
+						center: [40.813618, -96.705518],
+						zoom: 4
+						});
+
+				var canvas = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}',{
+						attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+						subdomains: 'abcd',
+						minZoom: 3,
+						maxZoom: 15,
+						ext: 'png'
+					}).addTo(map);
+
+
+					var schoolMarker = L.AwesomeMarkers.icon({
+						icon: 'university',
+						markerColor: 'blue',
+						prefix: 'fa'
+					});
+
+					var hospitalMarker = L.AwesomeMarkers.icon({
+						icon: 'medkit',
+						markerColor: 'red',
+						prefix: 'fa'
+					});
+
+					var urgentcareMarker = L.AwesomeMarkers.icon({
+						icon: 'ambulance',
+						markerColor: 'red',
+						prefix: 'fa'
+					});
+
+					var nursinghomeMarker = L.AwesomeMarkers.icon({
+						icon: 'medkitss',
+						markerColor: 'red',
+						prefix: 'fa'
+					});
+
+
+					var HospitalData = new L.geoJson(HospitalData,{
+						pointToLayer: function (feature, latlng) {
+						return L.marker(latlng, { icon: hospitalMarker
+						})
+					},
+					onEachFeature: function(feature, layer){
+						layer.bindPopup('<b>'+'Name: '+'</b>' + feature.properties.name
+						+ '<br/>' + '<hr />'+'Telephone: '+ feature.properties.telephone
+						+ '<br/>' + '<hr />'+'Beds: '+ feature.properties.beds
+						+ '<br/>' + '<hr />'+'Trauma: '+ feature.properties.trauma
+						+ '<br/>' + '<hr />'+'Website: '+ "<a href='" + feature.properties.website + "'>" + feature.properties.website + "</a>");
+					}
+					});
+
+					var SchoolData = new L.geoJson(SchoolData,{
+						pointToLayer: function (feature, latlng) {
+						return L.marker(latlng, { icon: schoolMarker
+						})
+					},
+					onEachFeature: function(feature, layer){
+						layer.bindPopup('<b>'+'Name: '+'</b>' + feature.properties.name
+						 + '<br/>' + '<hr />'+'Address: '+ feature.properties.address
+						 + '<br/>' + '<hr />'+'Telephone: '+ feature.properties.telephone
+						 + '<br/>' + '<hr />'+'Enrollment: '+ feature.properties.enrollment
+						 + '<br/>' + '<hr />'+'Website: '+ "<a href='" + feature.properties.Website + "'>" + feature.properties.Website + "</a>");
+					}
+					});
+
+					var UrgentCare = new L.geoJson(UrgentCareData,{
+						pointToLayer: function (feature, latlng) {
+						return L.marker(latlng, { icon: urgentcareMarker
+						})
+					},
+					onEachFeature: function(feature, layer){
+						layer.bindPopup('<b>'+'Name: '+'</b>' + feature.properties.name
+						 + '<br/>' + '<hr />'+'Address: '+ feature.properties.address
+						 + '<br/>' + '<hr />'+'Telephone: '+ feature.properties.telephone)
+					}
+					});
+
+					var NursingHomeData = new L.geoJson(NursingHomeData,{
+						pointToLayer: function (feature, latlng) {
+						return L.marker(latlng, { icon: nursinghomeMarker
+						})
+					},
+					onEachFeature: function(feature, layer){
+						layer.bindPopup('<b>'+'Name: '+'</b>' + feature.properties.name
+						 + '<br/>' + '<hr />'+'Address: '+ feature.properties.address
+						 + '<br/>' + '<hr />'+'Telephone: '+ feature.properties.telephone
+						 + '<br/>' + '<hr />'+'Beds: '+ feature.properties.beds
+						 + '<br/>' + '<hr />'+'Website: '+ "<a href='" + feature.properties.Website + "'>" + feature.properties.Website + "</a>");
+					}
+					});
+
+					var overlaymaps = {
+							"Public Schools": SchoolData,
+							"Hospitals": HospitalData,
+							"Urgent Care Facilities": UrgentCareData,
+							"Nursing Homes": NursingHomeData
+						};
+
+			L.control.layers(null, overlaymaps, {collapsed:false}).addTo(map);
+
+			map.on('overlayremove', function(eventLayer){
+				if (eventLayer.name == 'SchoolData'){
+			map.removeControl(legend);
+			}
+			});
+</script>
+</body>
+</html>
 
